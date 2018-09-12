@@ -1,0 +1,49 @@
+#!/bin/bash
+
+##################################################
+# File Name: configure-vim.sh
+# Author: xiangxiaoc
+# Email: xiangxiaoc@vip.qq.com
+# Created Time: Wed 12 Sep 2018 02:30:05 AM CST
+##################################################
+
+author_name='$author_name'
+author_email='$author_email'
+
+function append_str() {
+cat << EOF 
+autocmd BufNewFile *.py,*.sh, exec ":call SetTitle()"
+let $author_name = "xiangxiaoc"
+let $author_email = "xiangxiaoc@vip.qq.com"
+
+func SetTitle()
+if &filetype == 'sh'
+        call setline(1,"\#!/bin/bash")
+        call append(line("."), "")
+        call append(line(".")+1, "\##################################################")
+        call append(line(".")+2, "\# File Name: ".expand("%"))
+        call append(line(".")+3, "\# Author: ".$author_name)
+        call append(line(".")+4, "\# Email: ".$author_email)
+        call append(line(".")+5, "\# Created Time: ".strftime("%c"))
+        call append(line(".")+6, "\##################################################")
+        call append(line(".")+7, "")
+        call append(line(".")+8, "")
+else
+        call setline(1,"\#!/usr/bin/env python")
+        call append(line("."), "")
+        call append(line(".")+1, "\##################################################")
+        call append(line(".")+2, "\# File Name: ".expand("%"))
+        call append(line(".")+3, "\# Author: ".$author_name)
+        call append(line(".")+4, "\# Email: ".$author_email)
+        call append(line(".")+5, "\# Created Time: ".strftime("%c"))
+        call append(line(".")+6, "\##################################################")
+        call append(line(".")+7, "")
+        call append(line(".")+8, "")
+endif
+
+autocmd BufNewFile * normal G
+endfunction
+EOF
+}
+
+append_str >> ~/.vimrc
