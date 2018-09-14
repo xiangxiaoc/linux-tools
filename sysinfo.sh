@@ -58,7 +58,7 @@ EOF
 # 打印磁盘信息
 echo
 echo -e "\e[1;32m### disk info ### \e[0m"
-df -hP | grep -v 'tmpfs'
+df -hP | grep -v 'tmpfs' | awk '{if($4!=0)print}'
 
 # 基本运行现状
 echo
