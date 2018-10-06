@@ -29,7 +29,7 @@ if &filetype == 'sh'
         call append(line(".")+7, "")
 else
         call setline(1,"\#!/usr/bin/env python")
-        call append(line("."), "\#_*_ coding:utf-8 _*_")
+        call append(line("."), "\#coding:uft-8")
         call append(line(".")+1, "")
         call append(line(".")+2, "\##################################################")
         call append(line(".")+3, "\# File Name: ".expand("%"))
