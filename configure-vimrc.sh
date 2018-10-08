@@ -42,6 +42,8 @@ endif
 
 autocmd BufNewFile * normal G
 endfunction
+
+set number
 EOF
 }
 
