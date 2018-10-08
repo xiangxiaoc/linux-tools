@@ -43,6 +43,9 @@ endif
 autocmd BufNewFile * normal G
 endfunction
 
+" 显示命令过程
+set showcmd
+
 " 显示行号
 set number
 
