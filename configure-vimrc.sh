@@ -43,7 +43,20 @@ endif
 autocmd BufNewFile * normal G
 endfunction
 
+" 显示行号
 set number
+
+" 搜索匹配高亮，同时边输入边高亮
+set hlsearch
+set incsearch
+
+" 智能缩进
+set smartindent
+
+" 使用空格代替 tab 键
+" set expandtab
+" 智能tab
+" set smarttab
 EOF
 }
 
