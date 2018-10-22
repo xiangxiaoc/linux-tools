@@ -7,25 +7,49 @@
 ##################
 
 registry_url='192.168.3.10:5000'
-image_name='ecve'
-iamge_tag='18.09.1'
+image_name=''
+iamge_tag=''
 
 ##############
 # function
 ##############
 
 function check_api_version() {
-    GET $registry_url/v2/
+    curl -sX GET $registry_url/v2/
     echo
 }
 
 function list_image() {
     image_name=$1
-    GET $registry_url/v2/$image_name/tags/list | json_pp
+    curl -sX GET $registry_url/v2/$image_name/tags/list | json_pp
 }
 
 function list_images() {
-    GET $registry_url/v2/_catalog | json_pp
+    curl -sX GET $registry_url/v2/_catalog | json_pp
+}
+
+function delete_image() {
+    image_name=$1
+    iamge_tag=$2
+    curl -sX DELETE $registry_url/v2/$image_name/manifests/$iamge_tag
+}
+
+function show_help() {
+cat << EOF_help
+Docker Registry Management Script 
+    verison:    0.1.0
+    built:      2018-10-22 18:41:00
+    OS:         linux
+
+Usage:
+    $0 Command
+
+Command:
+    check                测试 registry 的API版本是否为v2
+    images               列出所有镜像
+    image   <IMAGE>      列出镜像所有 tag
+    del     <IMAGE TAG>  删除指定 tag 的镜像
+EOF_help
 }
 
 function main() {
@@ -41,7 +65,9 @@ function main() {
         'images')
             list_images ;;
         'del')
-            delete_image
+            delete_image $@ ;;
+        *)
+            show_help ;;
     esac
 }
 
