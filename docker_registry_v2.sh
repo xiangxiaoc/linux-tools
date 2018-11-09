@@ -15,8 +15,8 @@ iamge_tag=''
 ####################################
 
 function check_api_version() {
-    curl -sX GET $registry_url/v2/
-    echo
+    curl --connect-timeout 3 -sX GET $registry_url/v2/ > /dev/null
+    [ $? -eq 0 ] && echo '连接成功' || echo '连接超时或者API版本不匹配'
 }
 
 function list_image() {
@@ -28,10 +28,18 @@ function list_images() {
     curl -sX GET $registry_url/v2/_catalog | json_pp
 }
 
+function get_image_digest_bash() {
+    image_digest_bash=$(curl --header "Accept: application/vnd.docker.distribution.manifest.v2+json" \
+    -I -sX GET $registry_url/v2/$image_name/manifests/$iamge_tag | grep Docker-Content-Digest | awk {'print $2'})
+}
+
 function delete_image() {
     image_name=$1
     iamge_tag=$2
-    curl -sX DELETE $registry_url/v2/$image_name/manifests/$iamge_tag
+    get_image_digest_bash
+    # echo $image_digest_bash
+    curl -sX DELETE $registry_url/v2/$image_name/manifests/$image_digest_bash
+    # docker exec -it <registry_container_id> bin/registry garbage-collect <path_to_registry_config>
 }
 
 function show_help() {
