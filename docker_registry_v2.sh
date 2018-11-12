@@ -30,23 +30,24 @@ function list_images() {
 
 function get_image_digest_bash() {
     image_digest_bash=$(curl --header "Accept: application/vnd.docker.distribution.manifest.v2+json" \
-    -I -sX GET $registry_url/v2/$image_name/manifests/$iamge_tag | grep Docker-Content-Digest | awk {'print $2'})
+    -I -sX GET $registry_url/v2/$image_name/manifests/$iamge_tag | grep Docker-Content-Digest | awk {'print $2'} | sed 's/\r//')
 }
 
 function delete_image() {
     image_name=$1
     iamge_tag=$2
     get_image_digest_bash
-    # echo $image_digest_bash
     curl -sX DELETE $registry_url/v2/$image_name/manifests/$image_digest_bash
     # docker exec -it <registry_container_id> bin/registry garbage-collect <path_to_registry_config>
+    # docker exec registry bin/registry garbage-collect /etc/docker/registry/config.yml
+    # docker exec <容器名> rm -rf /var/lib/registry/docker/registry/v2/repositories/<镜像名>
 }
 
 function show_help() {
 cat << EOF_help
 Docker Registry Management Script 
-    verison:    0.1.0
-    built:      2018-10-22 18:41:00
+    verison:    1.0.0
+    built:      2018-11-12 21:36:43
     OS:         linux
 
 Usage:
@@ -56,7 +57,7 @@ Command:
     check                测试 registry 的API版本是否为v2
     images               列出所有镜像
     image   <IMAGE>      列出镜像所有 tag
-    del     <IMAGE TAG>  删除指定 tag 的镜像
+    del     <IMAGE> <TAG>  删除指定 tag 清单
 EOF_help
 }
 
@@ -65,7 +66,7 @@ function main() {
     shift
     case $Commmand in
         '')
-            ;;
+            show_help ;;
         'check')
             check_api_version  ;;
         'image')
