@@ -60,6 +60,9 @@ set smartindent
 " set expandtab
 " 智能tab
 " set smarttab
+
+" 输入模式按F9粘贴换行不缩进
+set pastetoggle=<F9>
 EOF
 }
 
