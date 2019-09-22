@@ -26,12 +26,12 @@ nameserver=$(cat /etc/resolv.conf | grep -E "\<nameserver[ ]+" | awk '{print $NF
 # 提取内存信息
 total_used_memory=$(awk '/MemTotal/{total=$2}/MemFree/{free=$2}END{print (total-free)/1024}' /proc/meminfo)M
 application_used_memory=$(awk '/MemTotal/{total=$2}/MemFree/{free=$2}/^Cached/{cached=$2}/Buffers/{buffers=$2}END{print (total-free-cached-buffers)/1024}' /proc/meminfo)M
-free_memory=$(awk '/MemFree/{print $2/1024}' /proc/meminfo)M
+free_memory=$( awk '/MemFree/{print $2/1024}' /proc/meminfo )M
 
 echo -e "\e[1;32m### basic info ### \e[0m"
 cat << EOF
-Hostname: $hostname
-OS Type: $os
+Hostname: ${hostname}
+OS Type: ${os}
 Distribution Version: $distribution_version
 Kernel Version: $kernel_version
 CPU Architecture: $cpu_architecture
