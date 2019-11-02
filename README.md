@@ -1,3 +1,4 @@
 # 概述
 
-作为一个系统管理员可以在 Linux 服务器系统上使用的脚本。
+尽量写一些能够常用的脚本。
+Try to write some often used scripts.
