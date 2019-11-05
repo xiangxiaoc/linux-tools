@@ -31,49 +31,48 @@ function getMemoryInfo() {
 }
 
 function getRunningStatus() {
-    now_time=$( date )
-    utc_time=$( date -u )
+    now_time=$( date +'%Y-%m-%d %H:%M:%S' )
+    utc_time=$( date -u +'%Y-%m-%d %H:%M:%S' )
     up_time=$( cat /proc/uptime| awk -F. '{run_days=$1 / 86400;run_hour=($1 % 86400)/3600;run_minute=($1 % 3600)/60;run_second=$1 % 60;printf("%dd %dh %dm %ds",run_days,run_hour,run_minute,run_second)}' )
 }
 
 getOSInfo
 echo -e "${printGreen1}### basic info ###${resetColor}"
 cat << EOF
-Hostname:   ${hostname}
-OS Type:    ${os}
-Distribution Version: $distribution_version
-Kernel Version: $kernel_version
-CPU Architecture: $cpu_architecture
+Hostname:                   ${hostname}
+OS Type:                    ${os}
+Distribution Version:       ${distribution_version}
+Distribution subversion:    ${distribution_subversion}
+Kernel Version:             $kernel_version
+CPU Architecture:           $cpu_architecture
 
 EOF
 
 getNetworkInfo
 echo -e "\e[1;32m### network info ### \e[0m"
 cat << EOF
-LAN IP: $ip
+LAN IP:     $ip
 Gateway IP: $default_gateway_ip
-Public IP: $public_ip
-Nameserver:
-$nameserver
+Public IP:  $public_ip
+Nameserver: $(echo $nameserver)
 
 EOF
 
 getMemoryInfo
 echo -e "\e[1;32m### memory info ### \e[0m"
 cat << EOF
-Total Used: $total_used_memory
-Application Used: $application_used_memory
-Free: $free_memory
+Total Used:         $total_used_memory
+Application Used:   $application_used_memory
+Free:               $free_memory
 EOF
 
 # 打印磁盘信息
-echo
-echo -e "\e[1;32m### disk info ### \e[0m"
-df -Th | awk '{ if($2 != "tmpfs") print }'
+echo -e "\n\e[1;32m### disk info ### \e[0m"
+df -Th | awk '{ if($2 != "tmpfs" && $2 != "devtmpfs") print }'
 
 # 基本运行现状
 getRunningStatus
-echo -e "\e[1;32m### running info ### \e[0m"
+echo -e "\n\e[1;32m### running info ### \e[0m"
 cat << EOF
 Local Time: ${now_time}
 UTC Time:   ${utc_time}
@@ -81,6 +80,5 @@ UP Time:    ${up_time}
 EOF
 
 # 当前用户有什么crontab定时任务
-echo
-echo -e "\e[1;32m### crontab tasks ### \e[0m"
+echo -e "\n\e[1;32m### crontab tasks ### \e[0m"
 crontab -l | grep -vE '^#|^$'
