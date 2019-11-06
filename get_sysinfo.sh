@@ -25,15 +25,20 @@ function getNetworkInfo() {
 
 
 function getMemoryInfo() {
-    total_used_memory=$( awk '/MemTotal/{total=$2}/MemFree/{free=$2}END{print (total-free)/1024}' /proc/meminfo )M
-    application_used_memory=$( awk '/MemTotal/{total=$2}/MemFree/{free=$2}/^Cached/{cached=$2}/Buffers/{buffers=$2}END{print (total-free-cached-buffers)/1024}' /proc/meminfo )M
-    free_memory=$( awk '/MemFree/{print $2/1024}' /proc/meminfo )M
+    total_used_memory=$( awk '/MemTotal/ {total=$2} /MemFree/ {free=$2} END {printf ("%.2f",(total-free)/1024/1024)}' /proc/meminfo )G
+    total_used_memory_percent=$( awk '/MemTotal/ {total=$2} /MemFree/ {free=$2} END {printf ("%.2f",(total-free)/total*100)}' /proc/meminfo )%
+    application_used_memory=$( awk '/MemTotal/ {total=$2}/MemFree/{free=$2}/^Cached/{cached=$2}/Buffers/{buffers=$2}END{printf ("%.2f",(total-free-cached-buffers)/1024/1024)}' /proc/meminfo )G
+    application_used_memory_percent=$( awk '/MemTotal/ {total=$2}/MemFree/{free=$2}/^Cached/{cached=$2}/Buffers/{buffers=$2}END{printf ("%.2f",(total-free-cached-buffers)/total*100)}' /proc/meminfo )%
+    free_memory=$( awk '/MemFree/ {printf ("%.2f",$2/1024/1024)}' /proc/meminfo )G
+    free_memory_percent=$( awk '/MemTotal/ {total=$2} /MemFree/ {free=$2} END {printf ("%.2f",free/total*100)}' /proc/meminfo )%
+    mem_total=$( awk '/MemTotal/ {printf ("%.2f",$2/1024/1024)}' /proc/meminfo )G
 }
 
 function getRunningStatus() {
-    now_time=$( date +'%Y-%m-%d %H:%M:%S' )
+    now_time=$( date +'%Y-%m-%d %H:%M:%S (%Z)' )
     utc_time=$( date -u +'%Y-%m-%d %H:%M:%S' )
-    up_time=$( cat /proc/uptime| awk -F. '{run_days=$1 / 86400;run_hour=($1 % 86400)/3600;run_minute=($1 % 3600)/60;run_second=$1 % 60;printf("%dd %dh %dm %ds",run_days,run_hour,run_minute,run_second)}' )
+    up_time=$( date -d "$(awk -F. '{print $1}' /proc/uptime) second ago" +"%Y-%m-%d %H:%M:%S (%Z)" )
+    running_age=$( cat /proc/uptime| awk -F. '{run_days=$1 / 86400;run_hour=($1 % 86400)/3600;run_minute=($1 % 3600)/60;run_second=$1 % 60;printf("%dd %dh %dm %ds",run_days,run_hour,run_minute,run_second)}' )
 }
 
 getOSInfo
@@ -49,7 +54,7 @@ CPU Architecture:           $cpu_architecture
 EOF
 
 getNetworkInfo
-echo -e "\e[1;32m### network info ### \e[0m"
+echo -e "${printGreen1}### network info ###${resetColor}"
 cat << EOF
 LAN IP:     $ip
 Gateway IP: $default_gateway_ip
@@ -59,26 +64,27 @@ Nameserver: $(echo $nameserver)
 EOF
 
 getMemoryInfo
-echo -e "\e[1;32m### memory info ### \e[0m"
+echo -e "${printGreen1}### memory info ###${resetColor}"
 cat << EOF
-Total Used:         $total_used_memory
-Application Used:   $application_used_memory
-Free:               $free_memory
+Total Used:         $total_used_memory (${total_used_memory_percent})
+Application Used:   $application_used_memory (${application_used_memory_percent})
+Free:               $free_memory (${free_memory_percent})
+Total Mem:          $mem_total
 EOF
 
 # 打印磁盘信息
-echo -e "\n\e[1;32m### disk info ### \e[0m"
+echo -e "\n${printGreen1}### disk info ###${resetColor}"
 df -Th | awk '{ if($2 != "tmpfs" && $2 != "devtmpfs") print }'
 
 # 基本运行现状
 getRunningStatus
-echo -e "\n\e[1;32m### running info ### \e[0m"
+echo -e "\n${printGreen1}### running info ###${resetColor}"
 cat << EOF
-Local Time: ${now_time}
 UTC Time:   ${utc_time}
-UP Time:    ${up_time}
+Local Time: ${now_time}
+UP Time:    ${up_time} (${running_age} ago)
 EOF
 
 # 当前用户有什么crontab定时任务
-echo -e "\n\e[1;32m### crontab tasks ### \e[0m"
+echo -e "\n${printGreen1}### crontab tasks ###${resetColor}"
 crontab -l | grep -vE '^#|^$'
