@@ -24,6 +24,12 @@ function getNetworkInfo() {
     nameserver=$(cat /etc/resolv.conf | grep -E "\<nameserver[ ]+" | awk '{print $NF}')
 }
 
+function getCPUInfo() {
+    vCPU_num=$( lscpu | awk '{ if ($1 == "CPU(s):") print $2}' )
+    load_average_1m=$( uptime | awk '{print $(NF-2)}' | cut -d ',' -f 1 )
+    load_average_5m=$( uptime | awk '{print $(NF-1)}' | cut -d ',' -f 1 )
+    load_average_15m=$( uptime | awk '{print $(NF-2)}' )
+}
 
 function getMemoryInfo() {
     total_used_memory=$( awk '/MemTotal/ {total=$2} /MemFree/ {free=$2} END {printf ("%.2f",(total-free)/1024/1024)}' /proc/meminfo )G
@@ -63,6 +69,16 @@ LAN IP:     $ip
 Gateway IP: $default_gateway_ip
 Public IP:  $public_ip
 Nameserver: $(echo $nameserver)
+
+EOF
+
+getCPUInfo
+echo -e "${printGreen1}### CPU info ###${resetColor}"
+cat << EOF
+vCPU num: ${vCPU_num}
+Load Average 15 min: ${load_average_15m}
+Load Average 5 min:  ${load_average_5m}
+Load Average 1 min:  ${load_average_1m}
 
 EOF
 
