@@ -28,7 +28,7 @@ function getCPUInfo() {
     vCPU_num=$( lscpu | awk '{ if ($1 == "CPU(s):") print $2}' )
     load_average_1m=$( uptime | awk '{print $(NF-2)}' | cut -d ',' -f 1 )
     load_average_5m=$( uptime | awk '{print $(NF-1)}' | cut -d ',' -f 1 )
-    load_average_15m=$( uptime | awk '{print $(NF-2)}' )
+    load_average_15m=$( uptime | awk '{print $NF}' )
 }
 
 function getMemoryInfo() {
