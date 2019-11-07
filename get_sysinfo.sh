@@ -8,9 +8,9 @@ resetColor='\e[0m'
 
 function getOSInfo() {
     os=$( uname -o )
-    distribution_name=${ID}
-    distribution_version=${ID}${VERSION_ID}
-    distribution_subversion=${PRETTY_NAME}
+    distribution_id=${ID}
+    distribution_version=${VERSION_ID}
+    distribution_pretty_name=${PRETTY_NAME}
     cpu_architecture=$( uname -p )
     kernel_version=$( uname -r )
     hostname=$( hostname )
@@ -48,8 +48,9 @@ cat << EOF
 Hostname:                   ${hostname}
 Domain:                     ${domain_name}
 OS Type:                    ${os}
+Distribution ID:            ${distribution_id}
 Distribution Version:       ${distribution_version}
-Distribution subversion:    ${distribution_subversion}
+Distribution Pretty Name:   ${distribution_pretty_name}
 Kernel Version:             $kernel_version
 CPU Architecture:           $cpu_architecture
 
