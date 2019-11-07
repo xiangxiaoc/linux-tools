@@ -14,6 +14,7 @@ function getOSInfo() {
     cpu_architecture=$( uname -p )
     kernel_version=$( uname -r )
     hostname=$( hostname )
+    domain_name=$( hostname -d )
 }
 
 function getNetworkInfo() {
@@ -45,6 +46,7 @@ getOSInfo
 echo -e "${printGreen1}### basic info ###${resetColor}"
 cat << EOF
 Hostname:                   ${hostname}
+Domain:                     ${domain_name}
 OS Type:                    ${os}
 Distribution Version:       ${distribution_version}
 Distribution subversion:    ${distribution_subversion}
