@@ -7,7 +7,7 @@
 # Created Time: Sun 23 Sep 2018 05:16:55 PM UTC
 ##################################################
 
-function add_str() {
+function add_config() {
   cat << EOF
 # python startup file  
 import readline  
@@ -27,6 +27,6 @@ del os, histfile, readline, rlcompleter
 EOF
 }
 
-add_str >> ~/.pythonstartup
+add_config >> ~/.pythonstartup
 
 echo "export PYTHONSTARTUP=~/.pythonstartup" >> ~/.bashrc
