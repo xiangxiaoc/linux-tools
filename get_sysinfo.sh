@@ -19,7 +19,7 @@ function getOSInfo() {
 
 function getNetworkInfo() {
     ip=$( hostname -I | awk '{print $1}' )
-    public_ip=$(curl -s http://ipecho.net/plain)
+    public_ip=$(curl -s --max-time 5 http://ipecho.net/plain)
     # centos of mininal installation need install net-tools
     default_gateway_ip=$( netstat -rn | awk '{if( $1 == "0.0.0.0" ) print $2}' )
     nameserver=$(cat /etc/resolv.conf | grep -E "\<nameserver[ ]+" | awk '{print $NF}')
