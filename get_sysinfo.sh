@@ -1,7 +1,7 @@
 #!/bin/bash
 
 [ -f /etc/os-release ] && . /etc/os-release
- 
+
 printGreen='\e[1;32m'
 printGreen1='\e[1;32m'
 resetColor='\e[0m'
