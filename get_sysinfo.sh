@@ -3,7 +3,6 @@
 [ -f /etc/os-release ] && . /etc/os-release
 
 printGreen='\e[1;32m'
-printGreen1='\e[1;32m'
 resetColor='\e[0m'
 
 function getOSInfo() {
@@ -50,7 +49,7 @@ function getRunningStatus() {
 }
 
 getOSInfo
-echo -e "${printGreen1}### basic info ###${resetColor}"
+echo -e "${printGreen}### basic info ###${resetColor}"
 cat << EOF
 Hostname:                   ${hostname}
 Domain:                     ${domain_name}
@@ -64,7 +63,7 @@ CPU Architecture:           $cpu_architecture
 EOF
 
 getNetworkInfo
-echo -e "${printGreen1}### network info ###${resetColor}"
+echo -e "${printGreen}### network info ###${resetColor}"
 cat << EOF
 LAN IP:     $ip
 Gateway IP: $default_gateway_ip
@@ -74,7 +73,7 @@ Nameserver: $(echo $nameserver)
 EOF
 
 getCPUInfo
-echo -e "${printGreen1}### CPU info ###${resetColor}"
+echo -e "${printGreen}### CPU info ###${resetColor}"
 cat << EOF
 vCPU num: ${vCPU_num}
 Load Average 15 min: ${load_average_15m}
@@ -84,7 +83,7 @@ Load Average 1 min:  ${load_average_1m}
 EOF
 
 getMemoryInfo
-echo -e "${printGreen1}### memory info ###${resetColor}"
+echo -e "${printGreen}### memory info ###${resetColor}"
 cat << EOF
 Total Used:         $total_used_memory (${total_used_memory_percent})
 Application Used:   $application_used_memory (${application_used_memory_percent})
@@ -93,12 +92,12 @@ Total Mem:          $mem_total
 EOF
 
 # 打印磁盘信息
-echo -e "\n${printGreen1}### disk info ###${resetColor}"
+echo -e "\n${printGreen}### disk info ###${resetColor}"
 df -Th | awk '{ if($2 != "tmpfs" && $2 != "devtmpfs") print }'
 
 # 基本运行现状
 getRunningStatus
-echo -e "\n${printGreen1}### running info ###${resetColor}"
+echo -e "\n${printGreen}### running info ###${resetColor}"
 cat << EOF
 UTC Time:   ${utc_time}
 Local Time: ${now_time}
@@ -106,5 +105,5 @@ UP Time:    ${up_time} (${running_age} ago)
 EOF
 
 # 当前用户有什么crontab定时任务
-echo -e "\n${printGreen1}### crontab tasks ###${resetColor}"
+echo -e "\n${printGreen}### crontab tasks ###${resetColor}"
 crontab -l | grep -vE '^#|^$'

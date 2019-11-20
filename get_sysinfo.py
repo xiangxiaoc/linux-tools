@@ -1,6 +1,4 @@
 #!/usr/bin/env python
-
-
 """
 Overview System Information
 """
@@ -17,12 +15,15 @@ class SystemInfoCollector:
         self.python_version_third = platform.python_version_tuple()[2]
         self.system = platform.system()  # Windows | Linux
         if self.system == "Windows":
-            self.windows_version = platform.release()
-            self.windows_revision = platform.version()
+            self.os_version = platform.release()
+            self.os_revision = platform.version()
         elif self.system == "Linux":
-            self.linux_version = ''
+            self.os_version = ''
 
 
 if __name__ == "__main__":
     a = SystemInfoCollector()
-    print(a.__dict__)
+    for k, v in a.__dict__.items():
+        if k in ("python_version_primary", "python_version_second", "python_version_third"):
+            continue
+        print("{:>30}: {:20}".format(k, v))
