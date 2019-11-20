@@ -1,4 +1,5 @@
-# 概述
+# 概述 Overview
 
 尽量写一些能够常用的脚本。
-Try to write some often used scripts.
+
+Try to write some scripts often used.
