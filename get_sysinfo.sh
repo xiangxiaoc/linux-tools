@@ -53,7 +53,7 @@ echo -e "${printGreen}### basic info ###${resetColor}"
 cat << EOF
 Hostname:                   ${hostname}
 Domain:                     ${domain_name}
-OS Type:                    ${os}
+OS:                         ${os}
 Distribution ID:            ${distribution_id}
 Distribution Version:       ${distribution_version}
 Distribution Pretty Name:   ${distribution_pretty_name}
