@@ -8,7 +8,8 @@ import socket
 
 
 class SystemInfoCollector:
-    def __init__(self):
+    def __init__(self, name='undefine'):
+        self.name = name
         self.hostname = platform.node()
         self.python_version = platform.python_version()
         self.python_version_primary = platform.python_version_tuple()[0]
@@ -33,7 +34,7 @@ class SystemInfoCollector:
 
 if __name__ == "__main__":
     a = SystemInfoCollector()
-    hidden_info = ("python_version_primary", "python_version_second", "python_version_third")
+    hidden_info = ("name", "python_version_primary", "python_version_second", "python_version_third")
     for k, v in a.__dict__.items():
         if k in hidden_info:
             continue
