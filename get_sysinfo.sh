@@ -12,7 +12,7 @@ function getOSInfo() {
     distribution_pretty_name=${PRETTY_NAME}
     cpu_architecture=$( uname -p )
     kernel_version=$( uname -r )
-    hostname=$( hostname )
+    hostname=$( hostname -s )
     domain_name=$( hostname -d )
 }
 
