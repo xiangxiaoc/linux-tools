@@ -89,21 +89,23 @@ Total Used:         $total_used_memory (${total_used_memory_percent})
 Application Used:   $application_used_memory (${application_used_memory_percent})
 Free:               $free_memory (${free_memory_percent})
 Total Mem:          $mem_total
+
 EOF
 
 # 打印磁盘信息
-echo -e "\n${printGreen}### disk info ###${resetColor}"
+echo -e "${printGreen}### disk info ###${resetColor}"
 df -Th | awk '{ if($2 != "tmpfs" && $2 != "devtmpfs") print }'
 
 # 基本运行现状
 getRunningStatus
-echo -e "\n${printGreen}### running info ###${resetColor}"
+echo -e "${printGreen}### running info ###${resetColor}"
 cat << EOF
 UTC Time:   ${utc_time}
 Local Time: ${now_time}
 UP Time:    ${up_time} (${running_age} ago)
+
 EOF
 
 # 当前用户有什么crontab定时任务
-echo -e "\n${printGreen}### crontab tasks ###${resetColor}"
+echo -e "${printGreen}### crontab tasks ###${resetColor}"
 crontab -l | grep -vE '^#|^$'
