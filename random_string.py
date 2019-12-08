@@ -10,6 +10,7 @@ Generate random string
 
 import random
 import string
+import sys
 
 
 class RandomStringGenerator:
@@ -33,4 +34,12 @@ class RandomStringGenerator:
 
 
 if __name__ == '__main__':
-    print(RandomStringGenerator(str_len=8).generate_string())
+    try:
+        input_str_len = int(sys.argv[1])
+    except IndexError:
+        input_str_len = 8
+    try:
+        input_str_type = sys.argv[2]
+    except IndexError:
+        input_str_type = "both"
+    print(RandomStringGenerator(str_len=input_str_len, str_type=input_str_type).generate_string())
