@@ -39,8 +39,8 @@ function getCPUInfo() {
 function getMemoryInfo() {
   total_used_memory=$(awk '/MemTotal/ {total=$2} /MemFree/ {free=$2} END {printf ("%.2f",(total-free)/1024/1024)}' /proc/meminfo)G
   total_used_memory_percent=$(awk '/MemTotal/ {total=$2} /MemFree/ {free=$2} END {printf ("%.2f",(total-free)/total*100)}' /proc/meminfo)%
-  application_used_memory=$(awk '/MemTotal/ {total=$2}/MemFree/{free=$2}/^Cached/{cached=$2}/Buffers/{buffers=$2}END{printf ("%.2f",(total-free-cached-buffers)/1024/1024)}' /proc/meminfo)G
-  application_used_memory_percent=$(awk '/MemTotal/ {total=$2}/MemFree/{free=$2}/^Cached/{cached=$2}/Buffers/{buffers=$2}END{printf ("%.2f",(total-free-cached-buffers)/total*100)}' /proc/meminfo)%
+  true_used_memory=$(awk '/MemTotal/ {total=$2}/MemFree/{free=$2}/^Cached/{cached=$2}/Buffers/{buffers=$2}END{printf ("%.2f",(total-free-cached-buffers)/1024/1024)}' /proc/meminfo)G
+  true_used_memory_percent=$(awk '/MemTotal/ {total=$2}/MemFree/{free=$2}/^Cached/{cached=$2}/Buffers/{buffers=$2}END{printf ("%.2f",(total-free-cached-buffers)/total*100)}' /proc/meminfo)%
   free_memory=$(awk '/MemFree/ {printf ("%.2f",$2/1024/1024)}' /proc/meminfo)G
   free_memory_percent=$(awk '/MemTotal/ {total=$2} /MemFree/ {free=$2} END {printf ("%.2f",free/total*100)}' /proc/meminfo)%
   mem_total=$(awk '/MemTotal/ {printf ("%.2f",$2/1024/1024)}' /proc/meminfo)G
@@ -92,7 +92,7 @@ EOF
   format_print_header "Memory Info"
   cat <<EOF
 Total Used:         $total_used_memory (${total_used_memory_percent})
-Application Used:   $application_used_memory (${application_used_memory_percent})
+True Used:          $true_used_memory (${true_used_memory_percent})
 Free:               $free_memory (${free_memory_percent})
 Total Mem:          $mem_total
 
