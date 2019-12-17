@@ -78,6 +78,26 @@ Nameserver: $(echo $nameserver)
 
 EOF
 
+  # print disk info
+  format_print_header "Disk Info"
+  df -Th | awk '{ if($2 != "tmpfs" && $2 != "devtmpfs") print }'
+  echo
+
+  # print cornjob of current user
+  format_print_header "Cornjob"
+  crontab -l | grep -vE '^#|^$'
+  echo
+
+  # print basic running info
+  getRunningStatus
+  format_print_header "Running Info"
+  cat <<EOF
+UTC Time:   ${utc_time}
+Local Time: ${now_time}
+UP Time:    ${up_time} (${running_age} ago)
+
+EOF
+
   getCPUInfo
   format_print_header "CPU Info"
   cat <<EOF
@@ -97,25 +117,6 @@ Free:               $free_memory (${free_memory_percent})
 Total Mem:          $mem_total
 
 EOF
-
-  # print disk info
-  format_print_header "Disk Info"
-  df -Th | awk '{ if($2 != "tmpfs" && $2 != "devtmpfs") print }'
-  echo
-
-  # print basic running info
-  getRunningStatus
-  format_print_header "Running Info"
-  cat <<EOF
-UTC Time:   ${utc_time}
-Local Time: ${now_time}
-UP Time:    ${up_time} (${running_age} ago)
-
-EOF
-
-  # print cornjob of current user
-  format_print_header "Cornjob"
-  crontab -l | grep -vE '^#|^$'
 }
 
 main_process "$@"
