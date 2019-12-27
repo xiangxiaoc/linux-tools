@@ -1,17 +1,19 @@
 #!/bin/bash
 
-function add_pid() {
+function cumulate_pids() {
+    ## Recursive function for cumulate pid
     local process_id=$1
     local subprocess_pids=$(ps -ef | awk '{if($3=="'$process_id'"){print $2}}')
     pids="$pids $subprocess_pids"
     for i in $subprocess_pids; do
-        add_pid $i
+        cumulate_pids $i
     done
 }
 
-function print_pids() {
-    add_pid $1
-    echo $pids
+function get_all_subprocess_pids() {
+    local process_id=$1
+    cumulate_pids $process_id
+    echo "$pids"
 }
 
-print_pids $1
+get_all_subprocess_pids $1
