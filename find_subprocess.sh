@@ -12,6 +12,7 @@ function cumulate_pids() {
 
 function get_all_subprocess_pids() {
     local process_id=$1
+    pids=""
     cumulate_pids $process_id
     echo "$pids"
 }
