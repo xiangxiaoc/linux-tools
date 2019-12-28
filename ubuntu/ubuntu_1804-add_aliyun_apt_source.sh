@@ -9,7 +9,7 @@ function change_apt_source_to_aliyun() {
         echo "Modified"
     else
         cp -a $APT_SOURCE_PATH{,.origin}
-        cat >$APT_SOURCE_PATH <<EOF
+        cat >$APT_SOURCE_PATH <<EOF_file_content
 ## Modified by script at $(date +'%Y-%m-%d %H:%M:%S %Z')
 deb http://mirrors.aliyun.com/ubuntu/ bionic main restricted universe multiverse
 deb http://mirrors.aliyun.com/ubuntu/ bionic-security main restricted universe multiverse
@@ -21,7 +21,7 @@ deb http://mirrors.aliyun.com/ubuntu/ bionic-backports main restricted universe 
 # deb-src http://mirrors.aliyun.com/ubuntu/ bionic-updates main restricted universe multiverse
 # deb-src http://mirrors.aliyun.com/ubuntu/ bionic-proposed main restricted universe multiverse
 # deb-src http://mirrors.aliyun.com/ubuntu/ bionic-backports main restricted universe multiverse
-EOF
+EOF_file_content
     fi
 }
 
@@ -33,11 +33,14 @@ function change_apt_source_back() {
 case $1 in
 "")
     change_apt_source_to_aliyun
+
     ;;
-recover)
+disable)
     change_apt_source_back
     ;;
 *)
     echo "default"
     ;;
 esac
+
+echo "have a try to run 'apt update'"
