@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 # @Time:    2019/12/4 23:25
 # @Name:    random_string.py
@@ -42,7 +42,7 @@ def parse_arguments():
     parser = ArgumentParser(description="generate secret")
     parser.add_argument("-l", "--length", required=False, type=int, metavar='num', default=8,
                         help="length of secret")
-    parser.add_argument("-s", "--spec-char", action="store_true", default=False,
+    parser.add_argument("-s", "--special-char", action="store_true", default=False,
                         help="secret with special characters")
 
     return parser.parse_args()
@@ -50,6 +50,6 @@ def parse_arguments():
 
 if __name__ == '__main__':
     args = parse_arguments()
-    run = RandomStringGenerator(str_len=args.length, sp=args.spec_char)
+    run = RandomStringGenerator(str_len=args.length, sp=args.special_char)
     secret = run.generate_string()
     print(secret)
