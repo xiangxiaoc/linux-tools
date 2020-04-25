@@ -7,18 +7,15 @@
 # Created Time: Wed 12 Sep 2018 02:30:05 AM CST
 ##################################################
 
-author_name='$author_name'
-author_email='$author_email'
-
 function append_str() {
-    cat <<EOF
+    cat <<'EOF'
 autocmd BufNewFile *.py,*.sh, exec ":call SetTitle()"
 let $author_name = "xiangxiaoc"
 let $author_email = "xiangxiaoc@vip.qq.com"
 
 func SetTitle()
 if &filetype == 'sh'
-    call setline(1,"\#!/bin/bash")
+    call setline(1,"\#!/bin/bash")asdsd
     call append(line("."), "")
     call append(line(".")+1, "\##################################################")
     call append(line(".")+2, "\# File Name: ".expand("%"))
