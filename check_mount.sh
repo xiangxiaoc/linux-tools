@@ -7,7 +7,7 @@ CG='\e[0;32m'
 RC='\e[0m'
 
 function check_permission() {
-    if [ ! $UID -eq 0 ]; then
+    if [ $UID -ne 0 ]; then
         echo "Only for root"
         exit
     fi
