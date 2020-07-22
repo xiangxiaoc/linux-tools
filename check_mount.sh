@@ -31,20 +31,20 @@ function check_mount() {
     for path in $list; do
         real_path=$(readlink -f "$path")
         if [ -z "$real_path" ]; then
-            echo -e "${CR}dir non exist${RC}            $path"
+            echo -e "${CR}dir not exist${RC}            $real_path"
             continue
         fi
         if mount | grep "${real_path%/}" &>/dev/null; then
             if eval ls "$real_path/*" &>/dev/null; then
-                echo -e "${CG}mounted${RC}                  $path"
+                echo -e "${CG}mounted${RC}                  $real_path"
             else
-                echo -e "${CY}problematic(no file)${RC}     $path"
+                echo -e "${CG}mounted(no file)${RC}         $real_path"
             fi
         else
             if eval ls "$real_path"/* &>/dev/null; then
-                echo -e "${CG}mounted${RC}                  $path"
+                echo -e "${CY}unmounted(local files exist)${RC}                  $real_path"
             else
-                echo -e "${CR}unmounted${RC}                $path"
+                echo -e "${CR}unmounted${RC}                $real_path"
             fi
         fi
     done
