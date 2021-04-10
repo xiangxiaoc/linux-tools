@@ -42,7 +42,7 @@ function check_mount() {
             fi
         else
             if eval ls "$real_path"/* &>/dev/null; then
-                echo -e "${CY}unmounted(local files exist)${RC}                  $real_path"
+                echo -e "${CY}unmounted(local files)${RC}   $real_path"
             else
                 echo -e "${CR}unmounted${RC}                $real_path"
             fi
